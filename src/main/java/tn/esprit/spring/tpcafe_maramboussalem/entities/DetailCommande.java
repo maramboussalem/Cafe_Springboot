@@ -4,10 +4,8 @@ import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
-
 @Entity
 @Table(name = "Detail_Commande")
-
 @Getter
 @Setter
 @ToString
@@ -17,10 +15,9 @@ import lombok.experimental.FieldDefaults;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @EqualsAndHashCode
 
-public class Detail_Commande {
+public class DetailCommande {
 
-    @ManyToOne
-    private Commande commande;
+    @ManyToOne private Commande commande;
     @ManyToOne Article article;
 
     @Id

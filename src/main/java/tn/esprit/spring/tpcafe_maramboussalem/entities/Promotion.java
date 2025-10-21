@@ -9,7 +9,6 @@ import java.util.List;
 
 @Entity
 @Table(name = "Promotion")
-
 @Getter
 @Setter
 @ToString
@@ -20,9 +19,7 @@ import java.util.List;
 @EqualsAndHashCode
 
 public class Promotion {
-
-    @ManyToMany(mappedBy = "promotions")
-    List<Article>articles;
+    @ManyToMany(mappedBy = "promotions") List<Article>articles;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

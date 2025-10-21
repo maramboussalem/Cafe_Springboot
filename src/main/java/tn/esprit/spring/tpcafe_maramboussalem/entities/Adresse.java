@@ -16,7 +16,6 @@ import lombok.experimental.FieldDefaults;
 @EqualsAndHashCode
 
 public class Adresse {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long idAdresse;

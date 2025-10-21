@@ -9,7 +9,6 @@ import java.util.List;
 
 @Entity
 @Table(name = "Commande")
-
 @Getter
 @Setter
 @ToString
@@ -20,10 +19,8 @@ import java.util.List;
 @EqualsAndHashCode
 
 public class Commande {
-    @OneToMany (mappedBy = "commande") List<Detail_Commande> detailCommandes;
-
-    @ManyToOne
-    private Client client;
+    @OneToMany (mappedBy = "commande") List<DetailCommande> detailCommandes;
+    @ManyToOne private Client client;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

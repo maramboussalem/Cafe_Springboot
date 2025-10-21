@@ -1,4 +1,4 @@
 package tn.esprit.spring.tpcafe_maramboussalem.RestControllers;
 
-public class Detail_CommandeRestController {
+public class DetailCommandeRestController {
 }

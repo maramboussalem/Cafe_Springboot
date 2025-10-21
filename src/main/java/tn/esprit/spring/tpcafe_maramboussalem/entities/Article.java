@@ -3,12 +3,10 @@ package tn.esprit.spring.tpcafe_maramboussalem.entities;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
-
 import java.util.List;
 
 @Entity
 @Table(name = "Article")
-
 @Getter
 @Setter
 @ToString
@@ -20,7 +18,7 @@ import java.util.List;
 
 public class Article {
     @ManyToMany List<Promotion> promotions;
-    @OneToMany (mappedBy = "article") List<Detail_Commande>detailCommandes;
+    @OneToMany (mappedBy = "article") List<DetailCommande>detailCommandes;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -18,7 +18,6 @@ import java.time.LocalDate;
 @EqualsAndHashCode
 
 public class CarteFidelite {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long idCarteFidelite;

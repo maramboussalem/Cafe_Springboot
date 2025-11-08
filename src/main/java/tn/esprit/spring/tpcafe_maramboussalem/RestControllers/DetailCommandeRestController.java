@@ -4,7 +4,8 @@ package tn.esprit.spring.tpcafe_maramboussalem.RestControllers;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
-import tn.esprit.spring.tpcafe_maramboussalem.entities.DetailCommande;
+import tn.esprit.spring.tpcafe_maramboussalem.dto.DetailCommande.DetailCommandeRequest;
+import tn.esprit.spring.tpcafe_maramboussalem.dto.DetailCommande.DetailCommandeResponse;
 import tn.esprit.spring.tpcafe_maramboussalem.services.DetailCommande.IDetailCommandeService;
 
 import java.util.List;
@@ -17,40 +18,50 @@ public class DetailCommandeRestController {
 
     private IDetailCommandeService detailCommandeService;
 
+    @PostMapping
+    public DetailCommandeResponse addDetailCommande(@RequestBody DetailCommandeRequest detailCommandeRequest) {
+        return detailCommandeService.addDetailCommande(detailCommandeRequest);
+    }
+
+
+    @GetMapping("/{id}")
+    public DetailCommandeResponse getDetailCommande(@PathVariable long id) {
+        return detailCommandeService.selectDetailCommandeById(id);
+    }
+
+
     @GetMapping
-    public List<DetailCommande> selectAllDetailCommande() {
+    public List<DetailCommandeResponse> getAllDetailCommande() {
         return detailCommandeService.selectAllDetailCommande();
     }
-    @PostMapping
-    public DetailCommande addDetailCommande(@RequestBody DetailCommande detailCommande) {
-        return detailCommandeService.addDetailCommande(detailCommande);
+
+
+    @GetMapping("/exists/{id}")
+    public boolean exists(@PathVariable long id) {
+        return detailCommandeService.verifDetailCommandeById(id);
     }
-    @PostMapping("adddetailcommande")
-    public List<DetailCommande> addDetailCommande(@RequestBody List<DetailCommande> detailCommandes) {
-        return detailCommandeService.saveDetailCommande(detailCommandes);
-    }
-    @GetMapping("selectById/{id}")
-    public DetailCommande selectDetailCommandeById(@PathVariable long id) {
-        return detailCommandeService.selectDetailCommandeByIdWithGet(id);
-    }
-    @GetMapping("selectById2")
-    public DetailCommande selectDetailCommandeById2(@RequestParam long id) {
-        return detailCommandeService.selectDetailCommandeByIdWithOrElse(id);
-    }
-    @DeleteMapping("deletebyid/{id}")
-    public void deleteDetailCommandeById(@PathVariable long id) {
-        detailCommandeService.deleteDetailCommandeById(id);
-    }
-    @DeleteMapping("deleteAll")
-    public void deleteAllDetailCommandes() {
-        detailCommandeService.deleteAllDetailCommande();
-    }
-    @GetMapping("count")
-    public long countDetailCommandes() {
+
+
+    @GetMapping("/count")
+    public long count() {
         return detailCommandeService.countDetailCommande();
     }
-    @GetMapping("exists/{id}")
-    public boolean verifDetailCommandeById(@PathVariable long id) {
-        return detailCommandeService.verifDetailCommandeById(id);
+
+
+    @PutMapping("/{id}")
+    public DetailCommandeResponse updateDetailCommande(@PathVariable long id, @RequestBody DetailCommandeRequest detailCommandeRequest) {
+        return detailCommandeService.updateDetailCommande(id, detailCommandeRequest);
+    }
+
+
+    @DeleteMapping("/{id}")
+    public void deleteDetailCommande(@PathVariable long id) {
+        detailCommandeService.deleteDetailCommandeById(id);
+    }
+
+
+    @DeleteMapping("/all")
+    public void deleteAll() {
+        detailCommandeService.deleteAllDetailCommande();
     }
 }

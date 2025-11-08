@@ -1,22 +1,24 @@
 package tn.esprit.spring.tpcafe_maramboussalem.services.Article;
 
-import tn.esprit.spring.tpcafe_maramboussalem.entities.Article;
+import tn.esprit.spring.tpcafe_maramboussalem.dto.Article.ArticleRequest;
+import tn.esprit.spring.tpcafe_maramboussalem.dto.Article.ArticleResponse;
 
 import java.util.List;
 
 public interface IArticleService {
 
-    Article addArticle(Article article);
-    List<Article> saveArticles(List<Article> articles);
-    Article selectArticleById(long id);
-    List<Article> selectAllArticles();
-    void deleteArticle(Article article);
-    void deleteAllArticles();
+    ArticleResponse addArticle(ArticleRequest articleRequest);
+
+    ArticleResponse selectArticleById(long id);
+    List<ArticleResponse> getAllArticles();
+
+    ArticleResponse updateArticle(long id, ArticleRequest request);
+
     void deleteArticleById(long id);
+    void deleteAllArticles();
+
     long countArticles();
     boolean verifArticleById(long id);
-    Article selectArticleByIdWithOrElse(long id) ;
-    Article selectArticleByIdWithGet(long id) ;
 }
 
 

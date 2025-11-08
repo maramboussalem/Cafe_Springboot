@@ -19,8 +19,6 @@ import java.util.List;
 @EqualsAndHashCode
 
 public class Promotion {
-    @ManyToMany(mappedBy = "promotions") List<Article>articles;
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long idPromotion;
@@ -28,5 +26,8 @@ public class Promotion {
     private String pourcentagePromo;
     private LocalDate dateDebutPromo;
     private LocalDate dateFinPromo;
+
+    @ManyToMany(mappedBy = "promotions")
+    List<Article>articles;
 
 }

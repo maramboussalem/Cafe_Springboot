@@ -2,72 +2,72 @@ package tn.esprit.spring.tpcafe_maramboussalem.services.CarteFidelite;
 
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+import tn.esprit.spring.tpcafe_maramboussalem.dto.CarteFidelite.CarteFideliteRequest;
+import tn.esprit.spring.tpcafe_maramboussalem.dto.CarteFidelite.CarteFideliteResponse;
 import tn.esprit.spring.tpcafe_maramboussalem.entities.CarteFidelite;
+import tn.esprit.spring.tpcafe_maramboussalem.mapper.CarteFideliteMapper;
 import tn.esprit.spring.tpcafe_maramboussalem.repositories.CarteFideliteRepository;
-
-import java.time.LocalDate;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
 public class CarteFideliteService implements ICarteFideliteService {
-    public CarteFideliteRepository carteFideliteRepository;
+
+    CarteFideliteRepository carteFideliteRepository;
+    CarteFideliteMapper carteFideliteMapper;
 
     @Override
-    public CarteFidelite addCarteFidelite(CarteFidelite carteFidelite){
-        return carteFideliteRepository.save(carteFidelite);
+    public CarteFideliteResponse addCarte(CarteFideliteRequest request) {
+        CarteFidelite carte = carteFideliteMapper.toEntity(request);
+        CarteFidelite saved = carteFideliteRepository.save(carte);
+        return carteFideliteMapper.toDto(saved);
     }
 
     @Override
-    public List<CarteFidelite> saveCarteFidelite(List<CarteFidelite> carteFidelites){
-        return carteFideliteRepository.saveAll(carteFidelites);
+    public CarteFideliteResponse getCarteById(long id) {
+        CarteFidelite carte = carteFideliteRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Carte fidélité introuvable : " + id));
+        return carteFideliteMapper.toDto(carte);
     }
 
     @Override
-    public CarteFidelite selectCarteFideliteById(long id){
-        return carteFideliteRepository.findById(id).get();
+    public List<CarteFideliteResponse> getAllCartes() {
+        return carteFideliteRepository.findAll()
+                .stream()
+                .map(carteFideliteMapper::toDto)
+                .collect(Collectors.toList());
     }
 
     @Override
-    public List<CarteFidelite> selectAllCarteFidelite(){
-        return carteFideliteRepository.findAll();
+    public CarteFideliteResponse updateCarte(long id, CarteFideliteRequest request) {
+        CarteFidelite carte = carteFideliteRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Carte fidélité introuvable : " + id));
+
+        carte.setPointsAccumules(request.getPointsAccumules());
+        carte.setDateCreation(request.getDateCreation());
+
+        CarteFidelite updated = carteFideliteRepository.save(carte);
+        return carteFideliteMapper.toDto(updated);
     }
 
     @Override
-    public void deleteCarteFidelite(CarteFidelite CarteFidelites){
-        carteFideliteRepository.delete(CarteFidelites);
-    }
-
-    @Override
-    public void deleteAllCarteFidelite(){
-        carteFideliteRepository.deleteAll();
-    }
-
-    @Override
-    public void deleteCarteFideliteById(long id){
+    public void deleteCarteById(long id) {
         carteFideliteRepository.deleteById(id);
     }
 
     @Override
-    public long countCarteFidelite(){
+    public void deleteAllCartes() {
+        carteFideliteRepository.deleteAll();
+    }
+
+    @Override
+    public long countCartes() {
         return carteFideliteRepository.count();
     }
 
     @Override
-    public boolean verifCarteFideliteById(long id){
+    public boolean verifCarteById(long id) {
         return carteFideliteRepository.existsById(id);
-    }
-
-    @Override
-    public CarteFidelite selectCarteFideliteByIdWithOrElse(long id) {
-           CarteFidelite carteFidelite = CarteFidelite.builder()
-                   .pointsAccumules(5).dateCreation(LocalDate.now())
-                   .build();
-           return carteFideliteRepository.findById(id).orElse(carteFidelite);
-    }
-
-    @Override
-    public CarteFidelite selectCarteFideliteByIdWithGet(long id) {
-        return carteFideliteRepository.findById(id).get();
     }
 }

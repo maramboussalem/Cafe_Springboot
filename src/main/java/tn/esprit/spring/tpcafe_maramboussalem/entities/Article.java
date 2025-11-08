@@ -17,9 +17,6 @@ import java.util.List;
 @EqualsAndHashCode
 
 public class Article {
-    @ManyToMany List<Promotion> promotions;
-    @OneToMany (mappedBy = "article") List<DetailCommande>detailCommandes;
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long idArticle;
@@ -29,4 +26,11 @@ public class Article {
 
     @Enumerated(EnumType.STRING)
     private TypeArticle typeArticle;
+
+    @ManyToMany
+    List<Promotion> promotions;
+
+    @OneToMany (mappedBy = "article")
+    List<DetailCommande>detailCommandes;
+
 }

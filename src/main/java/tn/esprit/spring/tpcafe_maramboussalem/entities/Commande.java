@@ -19,9 +19,6 @@ import java.util.List;
 @EqualsAndHashCode
 
 public class Commande {
-    @OneToMany (mappedBy = "commande") List<DetailCommande> detailCommandes;
-    @ManyToOne private Client client;
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long idCommande;
@@ -32,4 +29,9 @@ public class Commande {
     @Enumerated(EnumType.STRING)
     private StatusCommande statusCommande;
 
+    @OneToMany (mappedBy = "commande")
+    List<DetailCommande> detailCommandes;
+
+    @ManyToOne
+    private Client client;
 }

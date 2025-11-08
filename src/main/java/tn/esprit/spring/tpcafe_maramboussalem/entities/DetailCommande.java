@@ -16,10 +16,6 @@ import lombok.experimental.FieldDefaults;
 @EqualsAndHashCode
 
 public class DetailCommande {
-
-    @ManyToOne private Commande commande;
-    @ManyToOne Article article;
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long idDetail_Commande;
@@ -27,5 +23,11 @@ public class DetailCommande {
     private int quantiteArticle;
     private float sousTotalDetailArticle;
     private float sousTotalDetailArticleApresPromo;
+
+    @ManyToOne
+    private Commande commande;
+
+    @ManyToOne
+    Article article;
 
 }

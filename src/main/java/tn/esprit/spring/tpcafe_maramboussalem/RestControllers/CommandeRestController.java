@@ -3,7 +3,8 @@ package tn.esprit.spring.tpcafe_maramboussalem.RestControllers;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
-import tn.esprit.spring.tpcafe_maramboussalem.entities.Commande;
+import tn.esprit.spring.tpcafe_maramboussalem.dto.Commande.CommandeRequest;
+import tn.esprit.spring.tpcafe_maramboussalem.dto.Commande.CommandeResponse;
 import tn.esprit.spring.tpcafe_maramboussalem.services.Commande.ICommandeService;
 
 import java.util.List;
@@ -16,40 +17,43 @@ public class CommandeRestController {
 
     private ICommandeService commandeService;
 
+    @PostMapping
+    public CommandeResponse addCommande(@RequestBody CommandeRequest commandeRequest) {
+        return commandeService.addCommande(commandeRequest);
+    }
+
+    @GetMapping("/{id}")
+    public CommandeResponse getCommande(@PathVariable long id) {
+        return commandeService.selectCommandeById(id);
+    }
+
     @GetMapping
-    public List<Commande> selectAllCommande() {
+    public List<CommandeResponse> getAllCommandes() {
         return commandeService.selectAllCommande();
     }
-    @PostMapping
-    public Commande addCommande(@RequestBody Commande commande) {
-        return commandeService.addCommande(commande);
+
+    @GetMapping("/exists/{id}")
+    public boolean exists(@PathVariable long id) {
+        return commandeService.verifCommandeById(id);
     }
-    @PostMapping("addCommande")
-    public List<Commande> addCommande(@RequestBody List<Commande> commandes) {
-        return commandeService.saveCommande(commandes);
-    }
-    @GetMapping("selectById/{id}")
-    public Commande selectCommandeById(@PathVariable long id) {
-        return commandeService.selectCommandeByIdWithGet(id);
-    }
-    @GetMapping("selectById2")
-    public Commande selectCommandeById2(@RequestParam long id) {
-        return commandeService.selectCommandeByIdWithOrElse(id);
-    }
-    @DeleteMapping("deletebyid/{id}")
-    public void deleteCommandeById(@PathVariable long id) {
-        commandeService.deleteCommandeById(id);
-    }
-    @DeleteMapping("deleteAll")
-    public void deleteAllCommande() {
-        commandeService.deleteAllCommande();
-    }
-    @GetMapping("count")
-    public long countCommande() {
+
+    @GetMapping("/count")
+    public long count() {
         return commandeService.countCommande();
     }
-    @GetMapping("exists/{id}")
-    public boolean verifCommandeById(@PathVariable long id) {
-        return commandeService.verifCommandeById(id);
+
+    @PutMapping("/{id}")
+    public CommandeResponse updateCommande(@PathVariable long id, @RequestBody CommandeRequest commandeRequest) {
+        return commandeService.updateCommande(id, commandeRequest);
+    }
+
+    @DeleteMapping("/{id}")
+    public void deleteCommande(@PathVariable long id) {
+        commandeService.deleteCommandeById(id);
+    }
+
+    @DeleteMapping("/all")
+    public void deleteAll() {
+        commandeService.deleteAllCommande();
     }
 }

@@ -2,50 +2,79 @@ package tn.esprit.spring.tpcafe_maramboussalem.services.Promotion;
 
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+import tn.esprit.spring.tpcafe_maramboussalem.dto.Promotion.PromotionRequest;
+import tn.esprit.spring.tpcafe_maramboussalem.dto.Promotion.PromotionResponse;
+import tn.esprit.spring.tpcafe_maramboussalem.entities.Article;
 import tn.esprit.spring.tpcafe_maramboussalem.entities.Promotion;
+import tn.esprit.spring.tpcafe_maramboussalem.mapper.PromotionMapper;
+import tn.esprit.spring.tpcafe_maramboussalem.repositories.ArticleRepository;
 import tn.esprit.spring.tpcafe_maramboussalem.repositories.PromotionRepository;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
 public class PromotionService implements IPromotionService {
-    private PromotionRepository promotionRepository;
+    PromotionRepository promotionRepository;
+    PromotionMapper promotionMapper;
+    ArticleRepository articleRepository;
 
     @Override
-    public Promotion addPromotion(Promotion promotion) {
-        return promotionRepository.save(promotion);
+    public PromotionResponse addPromotion(PromotionRequest request) {
+        Promotion promotion = promotionMapper.toEntity(request);
+        List<Article> articles = articleRepository.findAllById(request.getArticleIds());
+        promotion.setArticles(articles);
+
+        // Optionnel : mettre à jour la relation inverse
+        for (Article a : articles) {
+            if (a.getPromotions() == null) a.setPromotions(new ArrayList<>());
+            a.getPromotions().add(promotion);
+        }
+
+        Promotion saved = promotionRepository.save(promotion);
+        return promotionMapper.toDto(saved);
+    }
+
+
+    @Override
+    public PromotionResponse selectPromotionById(long id) {
+        Promotion promotion = promotionRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Promotion introuvable: " + id));
+        return promotionMapper.toDto(promotion);
     }
 
     @Override
-    public List<Promotion> savePromotions(List<Promotion> promotions) {
-        return promotionRepository.saveAll(promotions);
+    public List<PromotionResponse> selectAllPromotions() {
+        return promotionRepository.findAll()
+                .stream()
+                .map(promotionMapper::toDto)
+                .collect(Collectors.toList());
     }
 
     @Override
-    public Promotion selectPromotionById(long id) {
-        return promotionRepository.findById(id).get();
-    }
+    public PromotionResponse updatePromotion(long id, PromotionRequest request) {
+        Promotion promotion = promotionRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Promotion introuvable: " + id));
 
-    @Override
-    public List<Promotion> selectAllPromotions() {
-        return promotionRepository.findAll();
-    }
+        promotion.setPourcentagePromo(request.getPourcentagePromo());
+        promotion.setDateDebutPromo(request.getDateDebutPromo());
+        promotion.setDateFinPromo(request.getDateFinPromo());
 
-    @Override
-    public void deletePromotion(Promotion promotion) {
-        promotionRepository.delete(promotion);
+        Promotion updated = promotionRepository.save(promotion);
+        return promotionMapper.toDto(updated);
     }
 
     @Override
     public void deleteAllPromotions() {
-         promotionRepository.deleteAll();
+        promotionRepository.deleteAll();
     }
 
     @Override
     public void deletePromotionById(long id) {
-       promotionRepository.deleteById(id);
+        promotionRepository.deleteById(id);
     }
 
     @Override
@@ -56,20 +85,5 @@ public class PromotionService implements IPromotionService {
     @Override
     public boolean verifPromotionById(long id) {
         return promotionRepository.existsById(id);
-    }
-
-    @Override
-    public Promotion selectPromotionByIdWithOrElse(long id) {
-        Promotion promotion = Promotion.builder()
-                .pourcentagePromo("50%")
-                .dateDebutPromo(LocalDate.now())
-                .dateFinPromo(LocalDate.now())
-                .build();
-        return promotionRepository.findById(id).orElse(promotion);
-    }
-
-    @Override
-    public Promotion selectPromotionByIdWithGet(long id) {
-        return promotionRepository.findById(id).get();
     }
 }

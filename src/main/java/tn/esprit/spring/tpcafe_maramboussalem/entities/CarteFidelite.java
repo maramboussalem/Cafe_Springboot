@@ -16,7 +16,6 @@ import java.time.LocalDate;
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @EqualsAndHashCode
-
 public class CarteFidelite {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

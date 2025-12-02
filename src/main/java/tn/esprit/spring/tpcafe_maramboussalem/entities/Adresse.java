@@ -14,7 +14,6 @@ import lombok.experimental.FieldDefaults;
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @EqualsAndHashCode
-
 public class Adresse {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -2,57 +2,55 @@ package tn.esprit.spring.tpcafe_maramboussalem.services.Adresse;
 
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+import tn.esprit.spring.tpcafe_maramboussalem.dto.Adresse.AdresseRequest;
+import tn.esprit.spring.tpcafe_maramboussalem.dto.Adresse.AdresseResponse;
 import tn.esprit.spring.tpcafe_maramboussalem.entities.Adresse;
+import tn.esprit.spring.tpcafe_maramboussalem.mapper.AdresseMapper;
 import tn.esprit.spring.tpcafe_maramboussalem.repositories.AdresseRepository;
+
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
-public class AdresseService implements IAdresseServices{
+public class AdresseService implements IAdresseServices {
 
-    public AdresseRepository  adresseRepository;
+    AdresseRepository  adresseRepository;
+    AdresseMapper adresseMapper;
 
     @Override
-    public Adresse addAdresse(Adresse adresse) {
-        return adresseRepository.save(adresse);
+    public AdresseResponse addAdresse(AdresseRequest request) {
+        Adresse adresse = adresseMapper.toEntity(request);
+        Adresse saved = adresseRepository.save(adresse);
+        return adresseMapper.toDto(saved);
     }
 
     @Override
-    public List<Adresse> saveAdresses(List<Adresse> adresses) {
-        return adresseRepository.saveAll(adresses);
+    public AdresseResponse selectAdresseById(long id) {
+        return adresseRepository.findById(id)
+                .map(adresseMapper::toDto)
+                .orElseThrow(() -> new RuntimeException("Adresse introuvable"));
     }
 
     @Override
-    public Adresse selectAdresseById(long id) {
-        return adresseRepository.findById(id).get();
+    public List<AdresseResponse> selectAllAdresses() {
+        return adresseRepository.findAll()
+                .stream()
+                .map(adresseMapper::toDto)
+                .collect(Collectors.toList());
     }
 
     @Override
-    public Adresse selectAdresseByIdWithGet(long id) {
-       return adresseRepository.findById(id).get();
-    }
+    public AdresseResponse updateAdresse(long id, AdresseRequest request) {
+        Adresse adresse = adresseRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Adresse introuvable"));
 
-    @Override
-    public Adresse selectAdresseByIdWithOrElse(long id) {
-        Adresse adresse = Adresse.builder()
-                .rue("Ezzahra").ville("Tunis").codePostal(1000)
-                .build();
-        return adresseRepository.findById(id).orElse(adresse);
-    }
+        adresse.setRue(request.getRue());
+        adresse.setVille(request.getVille());
+        adresse.setCodePostal(request.getCodePostal());
 
-    @Override
-    public List<Adresse> selectAllAdresses() {
-        return adresseRepository.findAll();
-    }
-
-    @Override
-    public void deleteAdresse(Adresse adresse) {
-         adresseRepository.delete(adresse);
-    }
-
-    @Override
-    public void deleteAllAdresses() {
-         adresseRepository.deleteAll();
+        Adresse updated = adresseRepository.save(adresse);
+        return adresseMapper.toDto(updated);
     }
 
     @Override
@@ -61,8 +59,8 @@ public class AdresseService implements IAdresseServices{
     }
 
     @Override
-    public long countAdresses() {
-        return adresseRepository.count();
+    public void deleteAllAdresses() {
+        adresseRepository.deleteAll();
     }
 
     @Override
@@ -70,4 +68,8 @@ public class AdresseService implements IAdresseServices{
         return adresseRepository.existsById(id);
     }
 
+    @Override
+    public long countAdresses() {
+        return adresseRepository.count();
+    }
 }

@@ -2,50 +2,84 @@ package tn.esprit.spring.tpcafe_maramboussalem.services.DetailCommande;
 
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+import tn.esprit.spring.tpcafe_maramboussalem.dto.DetailCommande.DetailCommandeRequest;
+import tn.esprit.spring.tpcafe_maramboussalem.dto.DetailCommande.DetailCommandeResponse;
+import tn.esprit.spring.tpcafe_maramboussalem.entities.Article;
+import tn.esprit.spring.tpcafe_maramboussalem.entities.Commande;
 import tn.esprit.spring.tpcafe_maramboussalem.entities.DetailCommande;
+import tn.esprit.spring.tpcafe_maramboussalem.mapper.DetailCommandeMapper;
+import tn.esprit.spring.tpcafe_maramboussalem.repositories.ArticleRepository;
+import tn.esprit.spring.tpcafe_maramboussalem.repositories.CommandeRepository;
 import tn.esprit.spring.tpcafe_maramboussalem.repositories.DetailCommandeRepository;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
 public class DetailCommandeService implements IDetailCommandeService {
 
-    public DetailCommandeRepository detailCommandeRepository;
+    DetailCommandeRepository detailCommandeRepository;
+    DetailCommandeMapper detailCommandeMapper;
+    ArticleRepository articleRepository;
+    CommandeRepository commandeRepository;
 
     @Override
-    public DetailCommande addDetailCommande(DetailCommande detailCommande) {
-        return detailCommandeRepository.save(detailCommande);
+    public DetailCommandeResponse addDetailCommande(DetailCommandeRequest request) {
+        // Vérifier que les IDs existent
+        Article article = articleRepository.findById(request.getArticleId())
+                .orElseThrow(() -> new RuntimeException("Article introuvable : " + request.getArticleId()));
+
+        Commande commande = commandeRepository.findById(request.getCommandeId())
+                .orElseThrow(() -> new RuntimeException("Commande introuvable : " + request.getCommandeId()));
+
+        DetailCommande detailCommande = detailCommandeMapper.toEntity(request);
+
+        detailCommande.setArticle(article);
+        detailCommande.setCommande(commande);
+
+        DetailCommande saved = detailCommandeRepository.save(detailCommande);
+        return detailCommandeMapper.toDto(saved);
+    }
+
+
+
+    @Override
+    public DetailCommandeResponse selectDetailCommandeById(long id) {
+        DetailCommande detail = detailCommandeRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Detail commande introuvable : " + id));
+        return detailCommandeMapper.toDto(detail);
     }
 
     @Override
-    public List<DetailCommande> saveDetailCommande(List<DetailCommande> detailCommandes) {
-        return detailCommandeRepository.saveAll(detailCommandes);
+    public List<DetailCommandeResponse> selectAllDetailCommande() {
+        return detailCommandeRepository.findAll()
+                .stream()
+                .map(detailCommandeMapper::toDto)
+                .collect(Collectors.toList());
     }
 
     @Override
-    public DetailCommande selectDetailCommandeById(long id) {
-        return detailCommandeRepository.findById(id).get();
-    }
+    public DetailCommandeResponse updateDetailCommande(long id, DetailCommandeRequest request) {
+        DetailCommande detail = detailCommandeRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Detail commande introuvable : " + id));
 
-    @Override
-    public List<DetailCommande> selectAllDetailCommande() {
-        return detailCommandeRepository.findAll();
-    }
+        detail.setQuantiteArticle(request.getQuantiteArticle());
+        detail.setSousTotalDetailArticle(request.getSousTotalDetailArticle());
+        detail.setSousTotalDetailArticleApresPromo(request.getSousTotalDetailArticleApresPromo());
 
-    @Override
-    public void deleteDetailCommande(DetailCommande detailCommande) {
-          detailCommandeRepository.delete(detailCommande);
-    }
-
-    @Override
-    public void deleteAllDetailCommande() {
-         detailCommandeRepository.deleteAll();
+        DetailCommande updated = detailCommandeRepository.save(detail);
+        return detailCommandeMapper.toDto(updated);
     }
 
     @Override
     public void deleteDetailCommandeById(long id) {
-         detailCommandeRepository.deleteById(id);
+        detailCommandeRepository.deleteById(id);
+    }
+
+    @Override
+    public void deleteAllDetailCommande() {
+        detailCommandeRepository.deleteAll();
     }
 
     @Override
@@ -56,20 +90,5 @@ public class DetailCommandeService implements IDetailCommandeService {
     @Override
     public boolean verifDetailCommandeById(long id) {
         return detailCommandeRepository.existsById(id);
-    }
-
-    @Override
-    public DetailCommande selectDetailCommandeByIdWithOrElse(long id) {
-        DetailCommande detailCommande = DetailCommande.builder()
-                .quantiteArticle(100)
-                .sousTotalDetailArticle(120)
-                .sousTotalDetailArticleApresPromo(140)
-                .build();
-        return detailCommandeRepository.findById(id).orElse(detailCommande);
-    }
-
-    @Override
-    public DetailCommande selectDetailCommandeByIdWithGet(long id) {
-        return detailCommandeRepository.findById(id).get();
     }
 }

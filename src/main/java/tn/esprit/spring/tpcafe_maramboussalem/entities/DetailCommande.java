@@ -5,27 +5,28 @@ import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 @Entity
-@Table(name = "Detail_Commande")
 @Getter
 @Setter
+@Builder
 @ToString
+@EqualsAndHashCode
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
+@Table(name = "Detail_Commande")
 @FieldDefaults(level = AccessLevel.PRIVATE)
-@EqualsAndHashCode
-
 public class DetailCommande {
-
-    @ManyToOne private Commande commande;
-    @ManyToOne Article article;
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long idDetail_Commande;
+    long idDetail_Commande;
 
-    private int quantiteArticle;
-    private float sousTotalDetailArticle;
-    private float sousTotalDetailArticleApresPromo;
+    int quantiteArticle;
+    float sousTotalDetailArticle;
+    float sousTotalDetailArticleApresPromo;
+
+    @ManyToOne
+    Commande commande;
+
+    @ManyToOne
+    Article article;
 
 }

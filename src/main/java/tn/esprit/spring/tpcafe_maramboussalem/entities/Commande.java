@@ -18,10 +18,7 @@ import java.util.List;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @EqualsAndHashCode
 
-public class Commande {
-    @OneToMany (mappedBy = "commande") List<DetailCommande> detailCommandes;
-    @ManyToOne private Client client;
-
+public class Commande  {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long idCommande;
@@ -32,4 +29,10 @@ public class Commande {
     @Enumerated(EnumType.STRING)
     private StatusCommande statusCommande;
 
+    @ManyToOne
+    @JoinColumn(name = "client_id")
+    private Client client;
+
+    @OneToMany(mappedBy = "commande", cascade = CascadeType.ALL)
+    private List<DetailCommande> details;
 }

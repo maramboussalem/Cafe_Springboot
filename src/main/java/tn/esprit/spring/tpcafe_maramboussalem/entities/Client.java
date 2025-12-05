@@ -17,11 +17,7 @@ import java.util.List;
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @EqualsAndHashCode
-
-public class Client {
-    @OneToOne CarteFidelite carte;
-    @OneToOne Adresse adresse;
-    @OneToMany (mappedBy = "client") List <Commande> commandes;
+public class Client  {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -31,5 +27,14 @@ public class Client {
     private String prenom;
     private LocalDate dateNaissance;
 
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "adresse_id")
+    private Adresse adresse;
+
+    @OneToOne(mappedBy = "client", cascade = CascadeType.ALL)
+    private CarteFidelite carteFidelite;
+
+    @OneToMany(mappedBy = "client", cascade = CascadeType.ALL)
+    private List<Commande> commandes;
 
 }

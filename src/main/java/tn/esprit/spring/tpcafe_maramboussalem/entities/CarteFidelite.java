@@ -16,12 +16,15 @@ import java.time.LocalDate;
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @EqualsAndHashCode
-
-public class CarteFidelite {
+public class CarteFidelite  {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long idCarteFidelite;
 
     private int pointsAccumules;
     private LocalDate dateCreation;
+
+    @OneToOne
+    @JoinColumn(name = "client_id")
+    private Client client;
 }

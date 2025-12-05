@@ -4,7 +4,8 @@ package tn.esprit.spring.tpcafe_maramboussalem.RestControllers;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
-import tn.esprit.spring.tpcafe_maramboussalem.entities.DetailCommande;
+import tn.esprit.spring.tpcafe_maramboussalem.dto.DetailCommande.DetailCommandeRequest;
+import tn.esprit.spring.tpcafe_maramboussalem.dto.DetailCommande.DetailCommandeResponse;
 import tn.esprit.spring.tpcafe_maramboussalem.services.DetailCommande.IDetailCommandeService;
 
 import java.util.List;
@@ -17,40 +18,121 @@ public class DetailCommandeRestController {
 
     private IDetailCommandeService detailCommandeService;
 
+    @PostMapping
+    public DetailCommandeResponse addDetailCommande(@RequestBody DetailCommandeRequest detailCommandeRequest) {
+        return detailCommandeService.addDetailCommande(detailCommandeRequest);
+    }
+
+
+    @GetMapping("/{id}")
+    public DetailCommandeResponse getDetailCommande(@PathVariable long id) {
+        return detailCommandeService.selectDetailCommandeById(id);
+    }
+
+
     @GetMapping
-    public List<DetailCommande> selectAllDetailCommande() {
+    public List<DetailCommandeResponse> getAllDetailCommande() {
         return detailCommandeService.selectAllDetailCommande();
     }
-    @PostMapping
-    public DetailCommande addDetailCommande(@RequestBody DetailCommande detailCommande) {
-        return detailCommandeService.addDetailCommande(detailCommande);
-    }
-    @PostMapping("adddetailcommande")
-    public List<DetailCommande> addDetailCommande(@RequestBody List<DetailCommande> detailCommandes) {
-        return detailCommandeService.saveDetailCommande(detailCommandes);
-    }
-    @GetMapping("selectById/{id}")
-    public DetailCommande selectDetailCommandeById(@PathVariable long id) {
-        return detailCommandeService.selectDetailCommandeByIdWithGet(id);
-    }
-    @GetMapping("selectById2")
-    public DetailCommande selectDetailCommandeById2(@RequestParam long id) {
-        return detailCommandeService.selectDetailCommandeByIdWithOrElse(id);
-    }
-    @DeleteMapping("deletebyid/{id}")
-    public void deleteDetailCommandeById(@PathVariable long id) {
-        detailCommandeService.deleteDetailCommandeById(id);
-    }
-    @DeleteMapping("deleteAll")
-    public void deleteAllDetailCommandes() {
-        detailCommandeService.deleteAllDetailCommande();
-    }
-    @GetMapping("count")
-    public long countDetailCommandes() {
-        return detailCommandeService.countDetailCommande();
-    }
-    @GetMapping("exists/{id}")
-    public boolean verifDetailCommandeById(@PathVariable long id) {
+
+
+    @GetMapping("/exists/{id}")
+    public boolean exists(@PathVariable long id) {
         return detailCommandeService.verifDetailCommandeById(id);
     }
+
+
+    @GetMapping("/count")
+    public long count() {
+        return detailCommandeService.countDetailCommande();
+    }
+
+
+    @PutMapping("/{id}")
+    public DetailCommandeResponse updateDetailCommande(@PathVariable long id, @RequestBody DetailCommandeRequest detailCommandeRequest) {
+        return detailCommandeService.updateDetailCommande(id, detailCommandeRequest);
+    }
+
+
+    @DeleteMapping("/{id}")
+    public void deleteDetailCommande(@PathVariable long id) {
+        detailCommandeService.deleteDetailCommandeById(id);
+    }
+
+
+    @DeleteMapping("/all")
+    public void deleteAll() {
+        detailCommandeService.deleteAllDetailCommande();
+    }
+
+
+    @GetMapping("/qty/{qty}")
+    public List<DetailCommandeResponse> getByQuantity(@PathVariable int qty) {
+        return detailCommandeService.findByQuantiteExact(qty);
+    }
+
+    @GetMapping("/soustotal/{st}")
+    public List<DetailCommandeResponse> getBySousTotal(@PathVariable float st) {
+        return detailCommandeService.findBySousTotalExact(st);
+    }
+
+    @GetMapping("/count/qtyGreater/{qty}")
+    public long countQtyGreater(@PathVariable int qty) {
+        return detailCommandeService.countQuantityGreater(qty);
+    }
+
+    @GetMapping("/exists/soustotal/{st}")
+    public boolean existsSousTotal(@PathVariable float st) {
+        return detailCommandeService.existsBySousTotalGreater(st);
+    }
+
+    @GetMapping("/qtyRange")
+    public List<DetailCommandeResponse> getQtyRange(
+            @RequestParam int min,
+            @RequestParam int max,
+            @RequestParam float stMin) {
+        return detailCommandeService.findByQuantiteRangeAndSousTotal(min, max, stMin);
+    }
+
+    @GetMapping("/soustotal/range")
+    public List<DetailCommandeResponse> getSousTotalRange(
+            @RequestParam float min,
+            @RequestParam float max) {
+        return detailCommandeService.findBySousTotalRangeOrderByQty(min, max);
+    }
+
+    @GetMapping("/soustotalpromo/range")
+    public List<DetailCommandeResponse> getSousTotalPromoRange(
+            @RequestParam float min,
+            @RequestParam float max) {
+        return detailCommandeService.findBySousTotalPromoRange(min, max);
+    }
+
+    @GetMapping("/qtyOrSousTotal")
+    public List<DetailCommandeResponse> qtyOrSousTotal(
+            @RequestParam int qty,
+            @RequestParam float st) {
+        return detailCommandeService.findByQtyOrSousTotalMin(qty, st);
+    }
+
+    @GetMapping("/top5")
+    public List<DetailCommandeResponse> top5() {
+        return detailCommandeService.top5Expensive();
+    }
+
+    @GetMapping("/qty/null")
+    public List<DetailCommandeResponse> getQtyNull() {
+        return detailCommandeService.findQuantityNull();
+    }
+
+    @GetMapping("/soustotalpromo/notnull")
+    public List<DetailCommandeResponse> getSousTotalPromoNotNull() {
+        return detailCommandeService.findSousTotalPromoNotNull();
+    }
+
+    @GetMapping("/with/commande-article")
+    public List<DetailCommandeResponse> getWithCommandeAndArticle() {
+        return detailCommandeService.findWithCommandeAndArticle();
+    }
+
 }

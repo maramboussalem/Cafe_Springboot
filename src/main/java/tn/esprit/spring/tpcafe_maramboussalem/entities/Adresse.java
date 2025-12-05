@@ -14,7 +14,6 @@ import lombok.experimental.FieldDefaults;
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @EqualsAndHashCode
-
 public class Adresse {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,4 +23,6 @@ public class Adresse {
     private String ville;
     private int codePostal;
 
+    @OneToOne(mappedBy = "adresse")
+    Client client;
 }

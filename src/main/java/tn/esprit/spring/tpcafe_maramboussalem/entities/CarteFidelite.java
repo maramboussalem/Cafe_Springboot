@@ -7,21 +7,24 @@ import lombok.experimental.FieldDefaults;
 import java.time.LocalDate;
 
 @Entity
-@Table(name = "CarteFidelite")
 @Getter
 @Setter
+@Builder
 @ToString
+@EqualsAndHashCode
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
+@Table(name = "CarteFidelite")
 @FieldDefaults(level = AccessLevel.PRIVATE)
-@EqualsAndHashCode
-
-public class CarteFidelite {
+public class CarteFidelite  {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long idCarteFidelite;
+    long idCarteFidelite;
 
-    private int pointsAccumules;
-    private LocalDate dateCreation;
+    int pointsAccumules;
+    LocalDate dateCreation;
+
+    @ManyToOne
+    Client client;
+
 }

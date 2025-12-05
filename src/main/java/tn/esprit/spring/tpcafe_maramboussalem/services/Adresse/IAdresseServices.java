@@ -1,22 +1,42 @@
 package tn.esprit.spring.tpcafe_maramboussalem.services.Adresse;
 
+import tn.esprit.spring.tpcafe_maramboussalem.dto.Adresse.AdresseRequest;
+import tn.esprit.spring.tpcafe_maramboussalem.dto.Adresse.AdresseResponse;
 import tn.esprit.spring.tpcafe_maramboussalem.entities.Adresse;
+import tn.esprit.spring.tpcafe_maramboussalem.entities.Client;
+
 import java.util.List;
 
 public interface IAdresseServices {
 
-    Adresse addAdresse(Adresse adresse);
-    List<Adresse> saveAdresses(List<Adresse> adresses);
-    Adresse selectAdresseById(long id);
-    List<Adresse>selectAllAdresses();
-    void deleteAdresse(Adresse adresse);
-    void deleteAllAdresses();
+    List<AdresseResponse> saveAdresses(List<AdresseRequest> requests);
+    AdresseResponse addAdresse(AdresseRequest adresseRequest);
+    AdresseResponse selectAdresseById(long id);
+    List<AdresseResponse> selectAllAdresses();
+    AdresseResponse updateAdresse(long id, AdresseRequest adresseRequest);
     void deleteAdresseById(long id);
-    long countAdresses();
+    void deleteAllAdresses();
     boolean verifAdresseById(long id);
-    Adresse selectAdresseByIdWithOrElse(long id) ;
-    Adresse selectAdresseByIdWithGet(long id) ;
+    long countAdresses();
+
+    List<AdresseResponse> findByVille(String ville);
+    List<AdresseResponse> findByCodePostal(Integer codePostal);
+    long countByVille(String ville);
+    void deleteByVille(String ville);
+    List<AdresseResponse> findByVilleAndCodePostal(String ville, Integer codePostal);
+    List<AdresseResponse> findByRueContainingIgnoreCaseAndVille(String motRue, String ville);
+    List<AdresseResponse> findByVilleIn(List<String> villes);
+    List<AdresseResponse> findByCodePostalBetween(Integer min, Integer max);
+    List<AdresseResponse> findByCodePostalGreaterThan(Integer cp);
+    List<AdresseResponse> findByCodePostalGreaterThanEqual(Integer cp);
+    List<AdresseResponse> findByCodePostalLessThan(Integer cp);
+    List<AdresseResponse> findByCodePostalLessThanEqual(Integer cp);
+    List<AdresseResponse> findByRueStartsWithAndVille(String prefix, String ville);
+    List<AdresseResponse> findByRueStartsWith(String prefix);
+    List<AdresseResponse> findByVilleEndsWith(String suffix);
+    List<AdresseResponse> findByRueIsNull();
+    List<AdresseResponse> findByVilleIsNotNull();
 
 
-
+    void ajouterEtAffecterAdresseAClient(Adresse ad, Client client);
 }

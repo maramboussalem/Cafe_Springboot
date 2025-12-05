@@ -8,28 +8,30 @@ import java.time.LocalDate;
 import java.util.List;
 
 @Entity
-@Table(name = "Commande")
 @Getter
 @Setter
+@Builder
 @ToString
+@EqualsAndHashCode
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
+@Table(name = "Commande")
 @FieldDefaults(level = AccessLevel.PRIVATE)
-@EqualsAndHashCode
 
-public class Commande {
-    @OneToMany (mappedBy = "commande") List<DetailCommande> detailCommandes;
-    @ManyToOne private Client client;
-
+public class Commande  {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long idCommande;
+    long idCommande;
 
-    private LocalDate dateCommande;
-    private float totalCommande;
+    LocalDate dateCommande;
+    float totalCommande;
 
     @Enumerated(EnumType.STRING)
-    private StatusCommande statusCommande;
+    StatusCommande statusCommande;
 
+    @ManyToOne
+    Client client;
+
+    @OneToMany(mappedBy = "commande", cascade = CascadeType.ALL)
+    List<DetailCommande> details;
 }

@@ -5,23 +5,24 @@ import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 @Entity
-@Table(name = "Adresse")
 @Getter
 @Setter
+@Builder
 @ToString
+@EqualsAndHashCode
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
+@Table(name = "Adresse")
 @FieldDefaults(level = AccessLevel.PRIVATE)
-@EqualsAndHashCode
-
 public class Adresse {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long idAdresse;
+    long idAdresse;
 
-    private String rue;
-    private String ville;
-    private int codePostal;
+    String rue;
+    String ville;
+    int codePostal;
 
+    @OneToOne(mappedBy = "adresse")
+    Client client;
 }

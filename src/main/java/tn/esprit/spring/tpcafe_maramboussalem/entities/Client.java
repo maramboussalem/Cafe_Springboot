@@ -8,28 +8,31 @@ import java.time.LocalDate;
 import java.util.List;
 
 @Entity
-@Table(name = "Client")
 @Getter
 @Setter
+@Builder
 @ToString
+@EqualsAndHashCode
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
+@Table(name = "Client")
 @FieldDefaults(level = AccessLevel.PRIVATE)
-@EqualsAndHashCode
-
-public class Client {
-    @OneToOne CarteFidelite carte;
-    @OneToOne Adresse adresse;
-    @OneToMany (mappedBy = "client") List <Commande> commandes;
-
+public class Client  {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long idClient;
+    long idClient;
 
-    private String nom;
-    private String prenom;
-    private LocalDate dateNaissance;
+    String nom;
+    String prenom;
+    LocalDate dateNaissance;
 
+    @OneToOne(cascade = CascadeType.ALL)
+    Adresse adresse;
+
+    @OneToMany(mappedBy = "client", cascade = CascadeType.ALL)
+    List<Commande> commandes;
+
+    @OneToMany(mappedBy = "client", cascade = CascadeType.ALL)
+    List<CarteFidelite> cartesFidelite;
 
 }

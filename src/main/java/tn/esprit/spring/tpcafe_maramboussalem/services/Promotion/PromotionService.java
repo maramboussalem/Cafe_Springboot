@@ -172,4 +172,12 @@ public class PromotionService implements IPromotionService {
                 .stream().map(promotionMapper::toDto).collect(Collectors.toList());
     }
 
+    @Override
+    public List<Article> getArticlesEnPromotionPourMoisCourant() {
+        int moisCourant = LocalDate.now().getMonthValue();
+        List<Article> articles = articleRepository.findByMoisPromotion(moisCourant);
+        articles.forEach(article -> System.out.println("Article en promotion : " + article.getNomArticle()));
+        return articles;
+    }
+
 }

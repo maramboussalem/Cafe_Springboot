@@ -22,6 +22,7 @@ public interface ArticleRepository extends JpaRepository<Article, Long> {
     List<Article> findByNomArticleEndingWith(String suffix);
     List<Article> findByTypeArticleIsNull();
     List<Article> findByPrixArticleIsNotNull();
+    List<Article> findByMoisPromotion(int mois);
 
     // 15. Articles avec promotions actives
     // Attention : Assurez-vous que l'entité Promotion a un champ boolean 'active'

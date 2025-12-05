@@ -54,6 +54,6 @@ public interface IClientService {
     void ajouterClientEtCarteFidelite(CarteFidelite carteFid) ;
 
     void ajouterEtAffecterAdresseAClient(Adresse a, Client c);
-
+    //List<Client> incrementerPoints();
 
 }

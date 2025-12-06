@@ -1,6 +1,7 @@
 package tn.esprit.spring.tpcafe_maramboussalem.services.Promotion;
 
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import tn.esprit.spring.tpcafe_maramboussalem.dto.Promotion.PromotionRequest;
 import tn.esprit.spring.tpcafe_maramboussalem.dto.Promotion.PromotionResponse;
@@ -15,6 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Slf4j
 @Service
 @AllArgsConstructor
 public class PromotionService implements IPromotionService {
@@ -170,6 +172,17 @@ public class PromotionService implements IPromotionService {
     public List<PromotionResponse> findExpired() {
         return promotionRepository.findExpired()
                 .stream().map(promotionMapper::toDto).collect(Collectors.toList());
+    }
+
+    public void afficherPromotionsDuMois() {
+        int moisActuel = LocalDate.now().getMonthValue();
+        List<Promotion> promotions = promotionRepository.findAll().stream()
+                .filter(p -> p.getDateDebutPromo().getMonthValue() == moisActuel)
+                .toList();
+
+        for (Promotion p : promotions) {
+            log.info("Promotion du mois sur article : {}", p.getArticle().getNomArticle());
+        }
     }
 
 }

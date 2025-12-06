@@ -8,9 +8,8 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 public class AdresseRequest {
-
      private String rue;
      private String ville;
      private int codePostal;
-     
+
 }

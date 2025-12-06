@@ -29,4 +29,6 @@ public interface ArticleRepository extends JpaRepository<Article, Long> {
     List<Article> findArticlesWithActivePromotions();
 
     List<Article> findByNomArticleContainingAndPrixArticleBetween(String nom, float min, float max);
+
+
 }

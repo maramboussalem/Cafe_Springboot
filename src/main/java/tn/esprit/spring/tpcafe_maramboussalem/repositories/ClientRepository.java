@@ -28,6 +28,7 @@ public interface ClientRepository extends JpaRepository<Client, Long> {
     List<Client> findByDateNaissanceIsNull();
     List<Client> findByAdresseIsNotNull();
     List<Client> findByAdresseVilleIn(List<String> villes);
+    List<Client> findByDateNaissance(LocalDate date);
 
     @Query("SELECT DISTINCT c FROM Client c JOIN c.cartesFidelite carte WHERE carte.pointsAccumules > :pts")
     List<Client> findClientsWithCartePointsGreaterThan(@Param("pts") int pts);
@@ -43,4 +44,11 @@ public interface ClientRepository extends JpaRepository<Client, Long> {
 
     @Query("SELECT DISTINCT c FROM Client c " + "JOIN c.commandes cmd " + "JOIN cmd.details d " + "JOIN d.article a " + "WHERE (c.nom LIKE %:str% OR c.prenom LIKE %:str%) " + "AND a.typeArticle = :type")
     List<Client> findClientsWithNameContainingAndOrderedArticleType(@Param("str") String str, @Param("type") TypeArticle type);
+
+
+    @Query("SELECT c FROM Client c WHERE DAY(c.dateNaissance) = :day AND MONTH(c.dateNaissance) = :month")
+    List<Client> findClientsByBirthday(int day, int month);
+
+
+
 }

@@ -2,6 +2,7 @@ package tn.esprit.spring.tpcafe_maramboussalem.services.Promotion;
 
 import tn.esprit.spring.tpcafe_maramboussalem.dto.Promotion.PromotionRequest;
 import tn.esprit.spring.tpcafe_maramboussalem.dto.Promotion.PromotionResponse;
+import tn.esprit.spring.tpcafe_maramboussalem.entities.Article;
 import tn.esprit.spring.tpcafe_maramboussalem.entities.Promotion;
 
 import java.time.LocalDate;
@@ -36,5 +37,6 @@ public interface IPromotionService {
     List<PromotionResponse> findWithArticles();
     List<PromotionResponse> findExpired();
 
-}
+
+    }
 

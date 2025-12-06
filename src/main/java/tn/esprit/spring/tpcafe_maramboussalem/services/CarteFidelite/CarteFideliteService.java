@@ -172,6 +172,15 @@ public class CarteFideliteService implements ICarteFideliteService {
         clientRepository.save(client);
     }
 
+    public List<CarteFidelite> getCartesDesClientsAvecAnniversaire(LocalDate date) {
+        return clientRepository.findByDateNaissance(date).stream()
+                .flatMap(client -> client.getCartesFidelite().stream())
+                .collect(Collectors.toList());
+    }
+
+    public void saveCarte(CarteFidelite carte) {
+        carteFideliteRepository.save(carte);
+    }
 
 
 }

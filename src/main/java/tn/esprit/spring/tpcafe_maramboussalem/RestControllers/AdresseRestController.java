@@ -32,6 +32,7 @@ public class AdresseRestController {
         return adresseService.selectAdresseById(id);
     }
 
+
     @PostMapping("/addAdresse")
     public AdresseResponse addAdresse(@RequestBody AdresseRequest adresseRequest) {
         return adresseService.addAdresse(adresseRequest);
@@ -47,30 +48,36 @@ public class AdresseRestController {
         return adresseService.verifAdresseById(id);
     }
 
+
     @GetMapping("/countAdresse")
     public long countAdresse() {
         return adresseService.countAdresses();
     }
+
 
     @PutMapping("/updateAdresse/{id}")
     public AdresseResponse updateAdresse(@PathVariable long id, @RequestBody AdresseRequest adresseRequest) {
         return adresseService.updateAdresse(id, adresseRequest);
     }
 
+
     @DeleteMapping("/deleteAdresse/{id}")
     public void deleteAdresse(@PathVariable long id) {
         adresseService.deleteAdresseById(id);
     }
+
 
     @DeleteMapping("/deleteAllAdresses")
     public void deleteAllAdresses() {
         adresseService.deleteAllAdresses();
     }
 
+
     @GetMapping("/findByVille/{ville}")
     public List<AdresseResponse> findByVille(@PathVariable String ville) {
         return adresseService.findByVille(ville);
     }
+
 
     @GetMapping("/findByCodePostal/{cp}")
     public List<AdresseResponse> findByCodePostal(@PathVariable Integer cp) {
@@ -82,20 +89,24 @@ public class AdresseRestController {
         return adresseService.countByVille(ville);
     }
 
+
     @DeleteMapping("/deleteByVille/{ville}")
     public void deleteByVille(@PathVariable String ville) {
         adresseService.deleteByVille(ville);
     }
+
 
     @GetMapping("/findByVilleAndCp")
     public List<AdresseResponse> findByVilleAndCp(@RequestParam String ville, @RequestParam Integer cp) {
         return adresseService.findByVilleAndCodePostal(ville, cp);
     }
 
+
     @GetMapping("/searchRueVille")
     public List<AdresseResponse> searchRueVille(@RequestParam String mot, @RequestParam String ville) {
         return adresseService.findByRueContainingIgnoreCaseAndVille(mot, ville);
     }
+
 
     @PostMapping("/findByVilleIn")
     public List<AdresseResponse> findByVilleIn(@RequestBody List<String> villes) {

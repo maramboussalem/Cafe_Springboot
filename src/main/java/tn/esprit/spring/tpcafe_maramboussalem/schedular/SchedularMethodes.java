@@ -21,9 +21,7 @@ import java.util.List;
 public class SchedularMethodes {
 
     private final CarteFideliteService carteFideliteService;
-    private ClientService clientService;
-
-   private PromotionService promotionService;
+    private PromotionService promotionService;
 
     //FixeDate(ms) FixeDelay(ms) cron( * * * * * * )
     /*@Scheduled(fixedRate = 2000)
